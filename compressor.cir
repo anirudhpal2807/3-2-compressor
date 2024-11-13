@@ -1,0 +1,55 @@
+Va A 0 PWL(0 0 1u 0 1.1u 3 100u 3 100.1u 0 200u 0)
+Vb B 0 PWL(0 0 50u 0 50.1u 3 150u 3 150.1u 0 200u 0)
+Vc C 0 PWL(0 3 100u 3 100.1u 0 200u 0)
+Vsel select 0 PWL(0 0 150u 0 150.1u 3 200u 3)
+Vdd vdd 0 dc 3
+
+.model pmod pmos level=54 version=4.7
+.model nmod nmos level=54 version=4.7
+
+M1 n1 A vdd vdd pmod w=100u l=10u
+M2 xor1_out B n1 vdd pmod w=100u l=10u
+M3 xor1_out A n2 0 nmod w=100u l=10u
+M4 n2 B 0 0 nmod w=100u l=10u
+
+M5 n3 A vdd vdd pmod w=100u l=10u
+M6 xnor1_out B n3 vdd pmod w=100u l=10u
+M7 xnor1_out A n4 0 nmod w=100u l=10u
+M8 n4 B 0 0 nmod w=100u l=10u
+
+M9 n5 xor1_out vdd vdd pmod w=100u l=10u
+M10 xor2_out C n5 vdd pmod w=100u l=10u
+M11 xor2_out xor1_out n6 0 nmod w=100u l=10u
+M12 n6 C 0 0 nmod w=100u l=10u
+
+M13 n7 xor1_out vdd vdd pmod w=100u l=10u
+M14 xnor2_out C n7 vdd pmod w=100u l=10u
+M15 xnor2_out xor1_out n8 0 nmod w=100u l=10u
+M16 n8 C 0 0 nmod w=100u l=10u
+
+M17 sum xor2_out select n9 nmod w=100u l=10u
+M18 n9 select 0 0 nmod w=100u l=10u
+M19 sum xnor2_out n10 vdd pmod w=100u l=10u
+M20 n10 select vdd vdd pmod w=100u l=10u
+
+M21 carry xor1_out n11 vdd pmod w=100u l=10u
+M22 n11 C vdd vdd pmod w=100u l=10u
+M23 carry xor1_out n12 0 nmod w=100u l=10u
+M24 n12 A 0 0 nmod w=100u l=10u
+
+D1 sum 0 LED_model
+D2 carry 0 LED_model
+
+.model LED_model D(Is=1e-14 Rs=0.1 N=1 Cj0=1p M=.5 Vj=.75 Fc=.5 Tt=0 Bv=100 Ibv=1e-3)
+
+.tran 1u 200u uic
+.control
+set units=degrees
+set filetype=ascii
+set wr_vecnames
+set wr_singlescale
+wrdata output.txt v(A) v(B) v(C) v(sum) v(carry)
+run
+plot v(A) v(B) v(C) v(sum) v(carry)
+.endc
+.end

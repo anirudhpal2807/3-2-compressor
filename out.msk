@@ -1,0 +1,45 @@
+// DSCH 2.7f
+// 11/10/2024 11:43:20 PM
+// D:\cmos project\3_2_anirudhpal\3_2_anirudh.sch
+
+module 3_2_anirudh( B,A,C,CARRY,sum);
+ input B,A,C;
+ output CARRY,sum;
+ wire w9,w10,w11,w12,w13,w14,w15,w16;
+ mux #(10) mux(CARRY,A,C,w3);
+ pmos #(44) sub_1(w9,vdd,A); //  
+ pmos #(44) sub_2(w9,vdd,B); //  
+ pmos #(47) sub_3(w4,vdd,w9); //  
+ nmos #(44) sub_4(w9,w10,A); //  
+ nmos #(12) sub_5(w10,vss,B); //  
+ nmos #(47) sub_6(w4,w11,w9); //  
+ nmos #(23) sub_7(w11,vss,A); //  
+ nmos #(23) sub_8(w11,vss,B); //  
+ pmos #(12) sub_9(w12,vdd,A); //  
+ pmos #(47) sub_10(w4,w12,B); //  
+ pmos #(51) sub_11(w3,vdd,w4); //  
+ nmos #(51) sub_12(w3,vss,w4); //  
+ pmos #(44) sub_13(w13,vdd,C); //  
+ pmos #(44) sub_14(w13,vdd,w3); //  
+ pmos #(47) sub_15(w7,vdd,w13); //  
+ nmos #(44) sub_16(w13,w14,C); //  
+ nmos #(12) sub_17(w14,vss,w3); //  
+ nmos #(47) sub_18(w7,w15,w13); //  
+ nmos #(23) sub_19(w15,vss,C); //  
+ nmos #(23) sub_20(w15,vss,w3); //  
+ pmos #(12) sub_21(w16,vdd,C); //  
+ pmos #(47) sub_22(w7,w16,w3); //  
+ pmos #(23) sub_23(sum,vdd,w7); //  
+ nmos #(23) sub_24(sum,vss,w7); //  
+endmodule
+
+// Simulation parameters in Verilog Format
+always
+#1000 B=~B;
+#2000 A=~A;
+#4000 C=~C;
+
+// Simulation parameters
+// B CLK 10 10
+// A CLK 20 20
+// C CLK 40 40
